@@ -8,7 +8,7 @@ func NewId() ID {
 	return uuid.New()
 }
 
-func ParseId(s string) (ID, error) {
+func ParseID(s string) (ID, error) {
 	id, err := uuid.Parse(s)
 	if err != nil {
 		return ID{}, err
