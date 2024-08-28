@@ -17,8 +17,12 @@ type UserHandler struct {
 	JwtExperiesIn int
 }
 
-func NewUserHandler(userDB database.UserInterface) *UserHandler {
-	return &UserHandler{UserDB: userDB}
+func NewUserHandler(userDB database.UserInterface, jwt *jwtauth.JWTAuth, jwtExpiresIn int) *UserHandler {
+	return &UserHandler{
+		UserDB:        userDB,
+		Jwt:           jwt,
+		JwtExperiesIn: jwtExpiresIn,
+	}
 }
 
 func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
@@ -38,10 +42,14 @@ func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	_, tokenString, _ := h.Jwt.Encode(map[string]interface{}{
+	_, tokenString, err := h.Jwt.Encode(map[string]interface{}{
 		"sub": u.ID.String(),
 		"exp": time.Now().Add(time.Second * time.Duration(h.JwtExperiesIn)).Unix(),
 	})
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	accessToken := struct {
 		AccessToken string `json:"access_token"`
 	}{
