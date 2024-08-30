@@ -1,5 +1,6 @@
 POST http://localhost:8000/products HTTP/1.0
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUwMTgyNTgsInN1YiI6ImVkYzA2ZGMyLWNjMmQtNDlmYi1hOTJiLTZkMGZmMWY1ZjU0YiJ9.zBswOVFmQaXR8IXI33X7BwA6ddJ8wpSAep_O9yz-Qlo
 
 {
     "name": "My Product",
@@ -7,11 +8,12 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8000/products/2a7180b0-a512-4aa5-90df-b4d1468631de HTTP/1.0
+GET http://localhost:8000/products/f648fda8-d116-43bf-a304-9c5a29a5f14e HTTP/1.0
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUwMTgyNTgsInN1YiI6ImVkYzA2ZGMyLWNjMmQtNDlmYi1hOTJiLTZkMGZmMWY1ZjU0YiJ9.zBswOVFmQaXR8IXI33X7BwA6ddJ8wpSAep_O9yz-Qlo
 
 ###
-PUT http://localhost:8000/products/2a7180b0-a512-4aa5-90df-b4d1468631de HTTP/1.0
+PUT http://localhost:8000/products/f648fda8-d116-43bf-a304-9c5a29a5f14e HTTP/1.0
 Content-Type: application/json
 
 {
