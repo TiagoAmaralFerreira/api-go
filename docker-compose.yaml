@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
+  postgres:
+    image: postgres:13
+    container_name: postgres
     restart: always
     platform: linux/amd64
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: goexpert
-      MYSQL_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: finance
     ports:
-      - "3306:3306"
+      - "5432:5432"
