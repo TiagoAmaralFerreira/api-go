@@ -1,6 +1,8 @@
 package configs
 
 import (
+	"os"
+
 	"github.com/go-chi/jwtauth"
 	"github.com/spf13/viper"
 )
@@ -19,21 +21,29 @@ type conf struct {
 }
 
 func LoadConfig(path string) (*conf, error) {
-	var cfg *conf
+	var cfg conf
+
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
 	viper.SetConfigFile(".env")
-	viper.AutomaticEnv()
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
+
+	if _, err := os.Stat(".env"); err == nil {
+		// O arquivo .env está presente, então leia-o
+		err := viper.ReadInConfig()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// O arquivo .env não está presente, leia apenas as variáveis de ambiente
+		viper.AutomaticEnv()
 	}
-	err = viper.Unmarshal(&cfg)
+
+	err := viper.Unmarshal(&cfg)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	cfg.TokenAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil)
-	return cfg, err
+	return &cfg, nil
 }
