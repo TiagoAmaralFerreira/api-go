@@ -1,6 +1,6 @@
 POST http://localhost:8000/products HTTP/1.0
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUwMTgyNTgsInN1YiI6ImVkYzA2ZGMyLWNjMmQtNDlmYi1hOTJiLTZkMGZmMWY1ZjU0YiJ9.zBswOVFmQaXR8IXI33X7BwA6ddJ8wpSAep_O9yz-Qlo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUxMTQxMjEsInN1YiI6ImFiMGFhMDk5LWUwYjEtNDY0Zi1hMWNiLTQ3NjI0NDE0NjQ4OCJ9.TbrFZImEEwn6rZpVj2Yg4OhyAkaOOGU5HkCY99oQVnE
 
 {
     "name": "My Product",
@@ -8,9 +8,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUwMTgyN
 }
 
 ###
-GET http://localhost:8000/products/f648fda8-d116-43bf-a304-9c5a29a5f14e HTTP/1.0
+GET http://localhost:8000/products/bb052c8f-2079-42c4-a9cf-87d2f94c7104 HTTP/1.0
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUwMTgyNTgsInN1YiI6ImVkYzA2ZGMyLWNjMmQtNDlmYi1hOTJiLTZkMGZmMWY1ZjU0YiJ9.zBswOVFmQaXR8IXI33X7BwA6ddJ8wpSAep_O9yz-Qlo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjUxNDAxMDAsInN1YiI6ImFiMGFhMDk5LWUwYjEtNDY0Zi1hMWNiLTQ3NjI0NDE0NjQ4OCJ9.HE5bvyV8tcUykL3Gvi8vlQTm85MQxf1G7PWaZ1SGV3w
 
 ###
 PUT http://localhost:8000/products/f648fda8-d116-43bf-a304-9c5a29a5f14e HTTP/1.0

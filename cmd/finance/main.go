@@ -8,12 +8,27 @@ import (
 	"github.com/TiagoAmaralFerreira/api-go/internal/infra/database"
 	"github.com/TiagoAmaralFerreira/api-go/internal/infra/webserver/handlers"
 
+	_ "github.com/TiagoAmaralFerreira/api-go/docs"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+// @title           Finance API
+// @version         1.0
+// @description     API with auhtentication
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Tiago Amaral
+
+// @host      localhost:8000
+// @BasePath  /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	configs, err := configs.LoadConfig(".")
@@ -30,15 +45,20 @@ func main() {
 	productHandler := handlers.NewProductHandler(productDB)
 
 	userDB := database.NewUser(db)
-	userHandler := handlers.NewUserHandler(userDB, configs.TokenAuth, configs.JWTExpiresIn)
+	userHandler := handlers.NewUserHandler(userDB)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.WithValue("jwt", configs.TokenAuth))
+	r.Use(middleware.WithValue("jwtExperiesIn", configs.JWTExpiresIn))
 
 	// Usuário
 
 	r.Post("/users", userHandler.Create)
 	r.Post("/users/generate_token", userHandler.GetJWT)
+
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	// Produto
 	r.Route("/products", func(r chi.Router) {
