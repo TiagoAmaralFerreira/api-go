@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/go-chi/jwtauth"
@@ -43,7 +44,7 @@ func LoadConfig(path string) (*conf, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println(cfg.JWTSecret)
 	cfg.TokenAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil)
 	return &cfg, nil
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -35,6 +36,7 @@ func NewUserHandler(userDB database.UserInterface) *UserHandler {
 
 func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
 	jwt, ok := r.Context().Value("jwt").(*jwtauth.JWTAuth)
+	fmt.Print(jwt)
 	if !ok {
 		http.Error(w, "JWT auth not found in context", http.StatusInternalServerError)
 		return
