@@ -34,39 +34,52 @@ func NewUserHandler(userDB database.UserInterface) *UserHandler {
 // @Router       /users/generate_token [post]
 
 func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
-	jwt := r.Context().Value("jwt").(*jwtauth.JWTAuth)
-	jwtExperiesIn := r.Context().Value("jwtExperiesIn").(int)
+	jwt, ok := r.Context().Value("jwt").(*jwtauth.JWTAuth)
+	if !ok {
+		http.Error(w, "JWT auth not found in context", http.StatusInternalServerError)
+		return
+	}
+
+	jwtExperiesIn, ok := r.Context().Value("jwtExperiesIn").(int)
+	if !ok {
+		http.Error(w, "JWT expiry time not found in context", http.StatusInternalServerError)
+		return
+	}
+
 	var user dto.GetJWTInput
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 
 	u, err := h.UserDB.FindByEmail(user.Email)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		err := Error{Message: err.Error()}
-		json.NewEncoder(w).Encode(err)
+		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
+
 	if !u.ValidatePassword(user.Password) {
-		w.WriteHeader(http.StatusUnauthorized)
+		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
+
 	_, tokenString, err := jwt.Encode(map[string]interface{}{
 		"sub": u.ID.String(),
 		"exp": time.Now().Add(time.Second * time.Duration(jwtExperiesIn)).Unix(),
 	})
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Failed to create JWT token", http.StatusInternalServerError)
 		return
 	}
+
 	accessToken := dto.GetJWTOutput{AcessToken: tokenString}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(accessToken)
-
+	err = json.NewEncoder(w).Encode(accessToken)
+	if err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+	}
 }
 
 // Create user godoc

@@ -51,6 +51,7 @@ func main() {
 		dbName,
 		dbPort,
 	)
+	fmt.Println(dsn)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
